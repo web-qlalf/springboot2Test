@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Member</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></link>
+</head>
+<body>
+ 	<div class="container">
+    	<h2>회원 목록</h2>
+    	<table class="board_list">
+	        <colgroup>
+	            <col width="15%"/>
+	            <col width="10%"/>
+	            <col width="10%"/>
+	            <col width="20%"/>
+	            <col width="*"/>
+	            <col width="5%"/>
+	            <col width="*"/>
+	            <col width="*"/>
+	        </colgroup>
+	        <thead>
+	            <tr>
+	                <th scope="col">회원번호</th>
+	                <th scope="col">아이디</th>
+	                <th scope="col">회원명</th>
+	                <th scope="col">이메일</th>
+	                <th scope="col">연락처</th>
+	                <th scope="col">성별</th>
+	                <th scope="col">가입일자</th>
+	                <th scope="col">회원유형</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	        	<tr th:if="${#lists.size(list)} > 0" th:each="list : ${list}">
+	        		<td th:text="${list.usridx}"></td>
+	        		<td class="title" th:text="${list.id}"></td>
+	        		<td th:text="${list.name}"></td>
+	        		<td th:text="${list.email}"></td>
+	        		<td th:text="${list.tel}"></td>
+	        		<td th:text="${list.gender}"></td>
+	        		<td th:text="${list.createdtime}"></td>
+	        		<td th:text="${list.userauth}"></td>
+	        	</tr>
+	        </tbody>
+	    </table>
+	    <a href="/member/openMemberJoin.do" class="btn">회원 추가</a>
+	</div>
+</body>
+</html>

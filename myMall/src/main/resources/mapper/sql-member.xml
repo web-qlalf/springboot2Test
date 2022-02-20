@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mall.mapper.MemberMapper">
+	
+	<select id="selectMemberList" resultType="mall.dto.MemberDto">
+		<![CDATA[
+			SELECT
+				USRIDX, ID, PW, NAME, EMAIL, TEL,
+				TO_CHAR(CREATEDTIME,'yyyy-MM-DD HH24:MI') AS CREATEDTIME,
+				CASE
+                    WHEN GENDER = 1 THEN '남'
+                    WHEN GENDER = 2 THEN '여'
+                    ELSE '-'
+                END AS GENDER,
+				 CASE
+                    WHEN USERAUTH = 1 THEN '관리자'
+                    WHEN USERAUTH = 2 THEN '회원'
+                    WHEN USERAUTH = 3 THEN '탈퇴'
+                    WHEN USERAUTH = 4 THEN '휴면'
+                    ELSE '-'
+                END AS USERAUTH
+			FROM
+				TBL_USER
+			WHERE
+				USERAUTH NOT IN  (3,4)
+			ORDER BY USRIDX DESC, CREATEDTIME DESC
+		]]>
+		<!-- USERAUTH '1: 어드민 2:회원 3:탈퇴 4:휴면';	 -->
+	</select>
+	<!--  parameterType="board.board.dto.BoardDto" useGeneratedKeys="true" keyProperty="boardIdx"  -->
+	<insert id="insertMember" parameterType="mall.dto.MemberDto" useGeneratedKeys="false">
+		<![CDATA[
+			INSERT INTO TBL_USER
+			(
+				usridx,
+				id,
+				pw,
+				email,
+				gender,
+				name,
+				tel,
+				createdtime,
+				userauth
+			)
+			VALUES
+			(
+				SEQTBLUSER2.NEXTVAL,
+				#{id},
+				#{pw},
+				#{email},
+				#{gender},
+				#{name},
+				#{tel},
+				SYSDATE,
+				#{userauth}
+			)
+		]]>
+		<selectKey keyProperty="usridx" resultType="int" order="AFTER"> SELECT SEQTBLUSER2.CURRVAL FROM DUAL </selectKey>
+	</insert>
+	
+	<select id="selectMemberDetail" parameterType="int" resultType="mall.dto.MemberDto">
+		<![CDATA[
+			SELECT
+				Member_idx,
+				title,
+				contents,
+				hit_cnt,
+				DATE_FORMAT(created_datetime, '%Y.%m.%d %H:%i:%s') AS created_datetime,
+				creator_id
+			FROM
+				t_Member
+			WHERE
+				Member_idx = #{MemberIdx}
+				AND deleted_yn = 'N'
+		]]>
+	</select>
+	
+	<update id="updateHitCount" parameterType="int">
+		<![CDATA[
+			UPDATE 
+				t_Member 
+			SET 
+				hit_cnt = hit_cnt + 1 
+			WHERE 
+				Member_idx = #{MemberIdx}
+		]]>
+	</update>
+	
+	<update id="updateMember" parameterType="mall.dto.MemberDto">
+		<![CDATA[
+			UPDATE t_Member SET 
+				title = #{title},
+				contents = #{contents},
+				updated_datetime = Now(),
+				updater_id = 'admin'
+			WHERE 
+				Member_idx = #{MemberIdx}
+		]]>
+	</update>
+	
+	<update id="deleteMember" parameterType="int">
+		<![CDATA[
+			UPDATE t_Member SET 
+				deleted_yn = 'Y',
+				updated_datetime = Now(),
+				updater_id = 'admin'
+			WHERE 
+				Member_idx = #{MemberIdx}
+		]]>
+	</update>
+</mapper>
