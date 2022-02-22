@@ -5,10 +5,12 @@ var MemberList = new function() {
 	this.NO_FLAG;
 	this.PAGE_NUM;
 	this.PAGE_LIMIT;
+	this.URL;
 
 	this.initConstant = function(param) {
 		if (param) {
 
+			MemberList.URL = param.URL;
 			MemberList.RETURN_SUCC = param.RETURN_SUCC;
 			MemberList.RETURN_FAIL = param.RETURN_FAIL;
 			MemberList.YES_FLAG = param.YES_FLAG;
@@ -35,7 +37,6 @@ var MemberList = new function() {
 			success: function(data) {
 				if (data.length > 0 && data[0].result == MemberList.RETURN_SUCC) {
 					gridWrite(data);
-					//					setPopupContent(data.data);
 				} else {
 					alert('데이터를 불러오는데 실패했습니다');
 				}
@@ -127,8 +128,8 @@ var MemberList = new function() {
 				onRowClicked: function(event) {
 					console.log('onRowClicked');
 					var selectedRows = gridOptions.api.getSelectedRows();
-					//				var detailPage =/*[[${detailPage}]]*/;
-									location.href = detailPage + '?user_id=' + selectedRows[0].id;
+//									var detailPage =/*[[${detailPage}]]*/;
+					location.href = MemberList.URL + '?user_id=' + selectedRows[0].id;
 					//  			userDeatilSelect(selectedRows);
 	
 				},
@@ -160,9 +161,7 @@ var MemberList = new function() {
 					return null;
 				},
 				getRowHeight: function(params) {
-	
 					return 28 * (Math.floor(list.length / 60) + 1);
-	
 				},
 				debug: false
 		};
@@ -173,47 +172,3 @@ var MemberList = new function() {
 //		});
 	}
 };
-
-//const
-//
-//
-//// 접속하면 ajax를 통해서 글 정보 가져오기 (페이징 작업을 위해서)
-//function getMemberList() {
-//    const param = {
-//        [csrfName]: csrfHash,
-//        admin_popup_id: id
-//    };
-//    $.ajax({
-//        url: '/Admin/Popup/selectPopupContent',
-//        type: 'post',
-//        data: param,
-//        dataType: 'json',
-//        success: function (data) {
-//            if (data.result == Popup.RETURN_SUCC) {
-//                setPopupContent(data.data);
-//            } else {
-//                GlobalPopup._MODAL('','데이터를 불러오는데 실패했습니다');
-//            }
-//        },
-//        error: function (request, status, error) {
-//            GlobalPopup._MODAL('','데이터를 불러오는데 실패했습니다');
-//        }
-//    });
-//}
-//
-//var list =/*[[${list}]]*/;
-
-//	 
-//
-//
-//
-//	// setup the grid after the page has finished loading
-//	document.addEventListener("DOMContentLoaded", () => {
-//	    const gridDiv = document.querySelector("#myGrid");
-//	    new agGrid.Grid(gridDiv, gridOptions);
-//	});
-//	
-//	function userDeatilSelect(selectedRows){
-//// 		console.log(selectedRows);
-//		var detailPage =/*[[${detailPage}]]*/;
-//	}

@@ -37,8 +37,9 @@ public class MemberController {
 	 * }
 	 */
 	@RequestMapping("/member/openMemberList.do")
-	public String openMemberList() throws Exception {
+	public String openMemberList(Model model) throws Exception {
 //		log.debug("openMemberList");
+		model.addAttribute("detailPage", "/member/memberDetail.do");
 		return "/member/memberList";
 	}
 
