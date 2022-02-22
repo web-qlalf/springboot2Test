@@ -3,28 +3,41 @@
 
 <mapper namespace="mall.mapper.MemberMapper">
 	
-	<select id="selectMemberList" resultType="mall.dto.MemberDto">
+	<select id="selectMemberTotalCount" parameterType="mall.dto.MemberDto" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_USER
+	</select>
+	
+	<select id="selectMemberList" parameterType="mall.dto.MemberDto"  resultType="mall.dto.MemberDto">
 		<![CDATA[
-			SELECT
-				USRIDX, ID, PW, NAME, EMAIL, TEL,
-				TO_CHAR(CREATEDTIME,'yyyy-MM-DD HH24:MI') AS CREATEDTIME,
-				CASE
-                    WHEN GENDER = 1 THEN '남'
-                    WHEN GENDER = 2 THEN '여'
-                    ELSE '-'
-                END AS GENDER,
-				 CASE
-                    WHEN USERAUTH = 1 THEN '관리자'
-                    WHEN USERAUTH = 2 THEN '회원'
-                    WHEN USERAUTH = 3 THEN '탈퇴'
-                    WHEN USERAUTH = 4 THEN '휴면'
-                    ELSE '-'
-                END AS USERAUTH
+			SELECT *
 			FROM
-				TBL_USER
-			WHERE
-				USERAUTH NOT IN  (3,4)
-			ORDER BY USRIDX DESC, CREATEDTIME DESC
+				(SELECT
+					rownum  as rn, USRIDX, ID, PW, NAME, EMAIL, TEL,
+					TO_CHAR(CREATEDTIME,'yyyy-MM-DD HH24:MI') AS CREATEDTIME,
+					'succ' AS result,
+					CASE
+	                    WHEN GENDER = 1 THEN '남'
+	                    WHEN GENDER = 2 THEN '여'
+	                    ELSE '-'
+	                END AS GENDER,
+					 CASE
+	                    WHEN USERAUTH = 1 THEN '관리자'
+	                    WHEN USERAUTH = 2 THEN '회원'
+	                    WHEN USERAUTH = 3 THEN '탈퇴'
+	                    WHEN USERAUTH = 4 THEN '휴면'
+	                    ELSE '-'
+	                END AS USERAUTH
+				FROM
+					TBL_USER
+	            WHERE
+	                rownum <= #{currentPageNo} * #{pageSize}
+				ORDER BY
+					USRIDX DESC, CREATEDTIME DESC)
+	       WHERE
+	            rn > (#{currentPageNo}-1) * #{pageSize}
 		]]>
 		<!-- USERAUTH '1: 어드민 2:회원 3:탈퇴 4:휴면';	 -->
 	</select>
@@ -59,20 +72,31 @@
 		<selectKey keyProperty="usridx" resultType="int" order="AFTER"> SELECT SEQTBLUSER2.CURRVAL FROM DUAL </selectKey>
 	</insert>
 	
-	<select id="selectMemberDetail" parameterType="int" resultType="mall.dto.MemberDto">
+	<select id="selectMemberDetail" parameterType="String" resultType="mall.dto.MemberDto">
 		<![CDATA[
 			SELECT
-				Member_idx,
-				title,
-				contents,
-				hit_cnt,
-				DATE_FORMAT(created_datetime, '%Y.%m.%d %H:%i:%s') AS created_datetime,
-				creator_id
+				USRIDX, ID, PW, NAME, EMAIL, TEL,
+				TO_CHAR(CREATEDTIME,'yyyy-MM-DD HH24:MI') AS CREATEDTIME,
+				CASE
+                    WHEN GENDER = 1 THEN '남'
+                    WHEN GENDER = 2 THEN '여'
+                    ELSE '-'
+                END AS GENDER,
+				 CASE
+                    WHEN USERAUTH = 1 THEN '관리자'
+                    WHEN USERAUTH = 2 THEN '회원'
+                    WHEN USERAUTH = 3 THEN '탈퇴'
+                    WHEN USERAUTH = 4 THEN '휴면'
+                    ELSE '-'
+                END AS USERAUTH
 			FROM
-				t_Member
+				TBL_USER
 			WHERE
-				Member_idx = #{MemberIdx}
-				AND deleted_yn = 'N'
+				USERAUTH NOT IN  (3,4)
+			AND
+				ID = #{userid}
+
+			ORDER BY USRIDX DESC, CREATEDTIME DESC
 		]]>
 	</select>
 	

@@ -2,12 +2,11 @@ package mall.dto;
 
 
 
-import java.util.Date;
-
 import lombok.Data;
+import mall.paging.CommonDTO;
 
 @Data
-public class MemberDto {
+public class MemberDto  extends CommonDTO{
 	private int usridx;
 	private String id;
 	private String pw;
@@ -17,4 +16,5 @@ public class MemberDto {
 	private String createdtime;
 	private String gender;
 	private String userauth;
+	private String result;
 }

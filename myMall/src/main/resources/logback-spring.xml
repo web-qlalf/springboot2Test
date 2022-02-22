@@ -15,8 +15,8 @@
 	</appender>
 
 	<!-- 로거 -->
-	<logger name="board" level="DEBUG" appender-ref="console"/>
-	<logger name="jdbc.sqlonly" level="INFO" appender-ref="console-infolog"/>
+	<logger name="mall" level="DEBUG" appender-ref="console"/>
+	<logger name="jdbc.sqlonly" level="TRACE" appender-ref="console-infolog"/>
 	<logger name="jdbc.resultsettable" level="TRACE" appender-ref="console-infolog"/>
 	<logger name="org.springframework" level="error"/>
 	<logger name="org.springframework.jdbc" level="error"/>
