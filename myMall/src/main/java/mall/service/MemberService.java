@@ -13,4 +13,6 @@ public interface MemberService {
 	void insertMember(MemberDto memberDto) throws Exception;
 	
 	MemberDto selectMemberDetail(String userid) throws Exception;
+
+	List<MemberDto> selectMemberListAgGrid() throws Exception;
 }

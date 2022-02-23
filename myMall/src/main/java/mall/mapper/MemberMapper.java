@@ -16,4 +16,6 @@ public interface MemberMapper {
 	MemberDto selectMemberDetail(String userId) throws Exception;
 
 	int selectMemberTotalCount(Criteria cri) throws Exception;
+
+	List<MemberDto> selectMemberListAgGrid() throws Exception;
 }

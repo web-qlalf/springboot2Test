@@ -22,6 +22,11 @@ public class MemberServiceImpl implements MemberService{
 	private MemberMapper memberMapper;
 	
 	@Override
+	public List<MemberDto> selectMemberListAgGrid() throws Exception{
+		return memberMapper.selectMemberListAgGrid();
+	}
+	
+	@Override
 	public List<MemberDto> selectMemberList(MemberDto memberDto) throws Exception{
 		
 		List<MemberDto> memberList = Collections.emptyList();

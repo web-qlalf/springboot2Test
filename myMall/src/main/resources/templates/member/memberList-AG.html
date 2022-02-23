@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Member</title>
+<link rel="stylesheet" th:href="@{/css/style.css}"></link>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+<link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css">
+</head>
+<style>
+.ag-row .ag-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+</style>
+<body>
+	<a href="/member/openMemberJoin.do" class="btn">회원 추가</a>
+	<div id="myGrid" style="height: 50vh; width: 100vw;" class="ag-theme-alpine"></div>
+	<div>
+		<th:block layout:fragment="paging">
+			<nav th:replace="/fragments/common :: pagination"></nav>
+		</th:block>
+	</div>
+
+</body>
+<script src="/js/member/member-list.js"></script>
+<script th:inline="javascript">
+	document.addEventListener("DOMContentLoaded", ()=> {
+		const gridDiv =	document.querySelector("#myGrid");
+		var list = /*[[${list}]]*/;
+		const columnDefs = [
+			{ headerName: "회원번호", field: "usridx" },
+			{ headerName: "아이디", field: "id" },
+			{ headerName: "회원명", field: "name" },
+			{ headerName: "이메일", field: "email" },
+			{ headerName: "연락처", field: "tel" },
+			{ headerName: "성별", field: "gender" },
+			{ headerName: "가입일자", field: "createdtime" },
+			{ headerName: "회원유형", field: "userauth" }
+		];
+		var gridOptions = {
+				columnDefs: columnDefs,
+				pagination: true,
+				paginationPageSize: 10,
+				rowData: list,
+				defaultColDef: {
+					editable: false,
+					width: 100
+				},
+				rowSelection: 'single', /* 'single' or 'multiple',*/
+				enableColResize: true,
+				enableSorting: true,
+				enableFilter: true,
+				enableRangeSelection: true,
+				suppressRowClickSelection: false,
+				animateRows: true,
+				suppressHorizontalScroll: true,
+				localeText: { noRowsToShow: '조회 결과가 없습니다.' },
+				getRowStyle: function(param) {
+					if (param.node.rowPinned) {
+						return { 'font-weight': 'bold', background: '#dddddd' };
+					}
+					return { 'text-align': 'center' };
+				},
+				gridSizeFit(param){
+					
+			        if ( window.innerWidth > 800 ){
+					  params.api.sizeColumnsToFit() 
+			        } else {
+			         let allColumnIds = [];
+			          this.gridOptions.columnApi.getAllColumns().forEach(function (column) {
+			            allColumnIds.push(column.colId);
+			          })
+			          this.gridOptions.columnApi.autoSizeColumns(allColumnIds);
+			        }
+				},
+				getRowHeight: function(param) {
+					if (param.node.rowPinned) {
+						return 30;
+					}
+					return 24;
+				},
+				onGridReady: function(event) {
+					event.api.sizeColumnsToFit();
+				},
+				onGridSizeChanged: function(event) {
+					event.api.sizeColumnsToFit();
+				},
+				onRowEditingStarted: function(event) {
+					console.log('never called - not doing row editing');
+				},
+				onRowEditingStopped: function(event) {
+					console.log('never called - not doing row editing');
+				},
+				onCellEditingStarted: function(event) {
+					console.log('cellEditingStarted');
+				},
+				onCellEditingStopped: function(event) {
+					console.log('cellEditingStopped');
+				},
+				onRowClicked: function(event) {
+					console.log('onRowClicked');
+					var selectedRows = gridOptions.api.getSelectedRows();
+					var detailPage =/*[[${detailPage}]]*/;
+					location.href =  detailPage + '?user_id=' + selectedRows[0].id;
+	
+				},
+				onCellClicked: function(event) {
+					console.log('onCellClicked');
+				},
+				isRowSelectable: function(event) {
+					console.log('isRowSelectable');
+					return true;
+				},
+				onSelectionChanged: function(event) {
+					console.log('onSelectionChanged');
+				},
+				onSortChanged: function(event) {
+					console.log('onSortChanged');
+				},
+				onCellValueChanged: function(event) {
+					console.log('onCellValueChanged');
+				},
+				getRowNodeId: function(data) {
+					return null;
+				},
+				// 리드 상단 고정 
+				setPinnedTopRowData: function(data) {
+					return null;
+				},
+				// 그리드 하단 고정 
+				setPinnedBottomRowData: function(data) {
+					return null;
+				},
+				getRowHeight: function(params) {
+					return 28 * (Math.floor(list.length / 60) + 1);
+				},
+				debug: false
+		};
+		
+		new agGrid.Grid(gridDiv, gridOptions);
+	});
+</script>
+</html>

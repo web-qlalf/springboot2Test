@@ -28,11 +28,30 @@ var MemberList = new function() {
 		}
 	}
 
+	
+	
 	function getListInfo(setting) {
 		$.ajax({
 			url: '/member/getUserList.do',
 			type: 'post',
-			data: setting,
+			dataType: 'json',
+			success: function(data) {
+				if (data.length > 0 && data[0].result == MemberList.RETURN_SUCC) {
+					gridWrite(data);
+				} else {
+					alert('데이터를 불러오는데 실패했습니다');
+				}
+			},
+			error: function(request, status, error) {
+				console.log("code: " + request.status + "\n" + "message: " + request.responseText + "\n" + "error: " + error);
+				alert('데이터를 불러오는데 실패했습니다222');
+			}
+		});
+	}
+	this.getListInfoGet = function(url) {
+		$.ajax({
+			url: url,
+			type: 'get',
 			dataType: 'json',
 			success: function(data) {
 				if (data.length > 0 && data[0].result == MemberList.RETURN_SUCC) {
@@ -80,95 +99,96 @@ var MemberList = new function() {
 
 
 		var gridOptions = {
-				columnDefs: columnDefs,
-				rowData: arr,
-				defaultColDef: {
-					editable: false,
-					width: 100
-				},
-				rowSelection: 'single', /* 'single' or 'multiple',*/
-				enableColResize: true,
-				enableSorting: true,
-				enableFilter: true,
-				enableRangeSelection: true,
-				suppressRowClickSelection: false,
-				animateRows: true,
-				suppressHorizontalScroll: true,
-				localeText: { noRowsToShow: '조회 결과가 없습니다.' },
-				getRowStyle: function(param) {
-					if (param.node.rowPinned) {
-						return { 'font-weight': 'bold', background: '#dddddd' };
-					}
-					return { 'text-align': 'center' };
-				},
-				getRowHeight: function(param) {
-					if (param.node.rowPinned) {
-						return 30;
-					}
-					return 24;
-				},
-				onGridReady: function(event) {
-					event.api.sizeColumnsToFit();
-				},
-				onGridSizeChanged: function(event) {
-					event.api.sizeColumnsToFit();
-				},
-				onRowEditingStarted: function(event) {
-					console.log('never called - not doing row editing');
-				},
-				onRowEditingStopped: function(event) {
-					console.log('never called - not doing row editing');
-				},
-				onCellEditingStarted: function(event) {
-					console.log('cellEditingStarted');
-				},
-				onCellEditingStopped: function(event) {
-					console.log('cellEditingStopped');
-				},
-				onRowClicked: function(event) {
-					console.log('onRowClicked');
-					var selectedRows = gridOptions.api.getSelectedRows();
-//									var detailPage =/*[[${detailPage}]]*/;
-					location.href = MemberList.URL + '?user_id=' + selectedRows[0].id;
-					//  			userDeatilSelect(selectedRows);
-	
-				},
-				onCellClicked: function(event) {
-					console.log('onCellClicked');
-				},
-				isRowSelectable: function(event) {
-					console.log('isRowSelectable');
-					return true;
-				},
-				onSelectionChanged: function(event) {
-					console.log('onSelectionChanged');
-				},
-				onSortChanged: function(event) {
-					console.log('onSortChanged');
-				},
-				onCellValueChanged: function(event) {
-					console.log('onCellValueChanged');
-				},
-				getRowNodeId: function(data) {
-					return null;
-				},
-				// 리드 상단 고정 
-				setPinnedTopRowData: function(data) {
-					return null;
-				},
-				// 그리드 하단 고정 
-				setPinnedBottomRowData: function(data) {
-					return null;
-				},
-				getRowHeight: function(params) {
-					return 28 * (Math.floor(list.length / 60) + 1);
-				},
-				debug: false
+			columnDefs: columnDefs,
+			rowData: arr,
+			defaultColDef: {
+				editable: false,
+				width: 100
+			},
+			rowSelection: 'single', /* 'single' or 'multiple',*/
+			enableColResize: true,
+			enableSorting: true,
+			enableFilter: true,
+			enableRangeSelection: true,
+			suppressRowClickSelection: false,
+			animateRows: true,
+			suppressHorizontalScroll: true,
+			localeText: { noRowsToShow: '조회 결과가 없습니다.' },
+			getRowStyle: function(param) {
+				if (param.node.rowPinned) {
+					return { 'font-weight': 'bold', background: '#dddddd' };
+				}
+				return { 'text-align': 'center' };
+			},
+			getRowHeight: function(param) {
+				if (param.node.rowPinned) {
+					return 30;
+				}
+				return 24;
+			},
+			onGridReady: function(event) {
+				event.api.sizeColumnsToFit();
+			},
+			onGridSizeChanged: function(event) {
+				event.api.sizeColumnsToFit();
+			},
+			onRowEditingStarted: function(event) {
+				console.log('never called - not doing row editing');
+			},
+			onRowEditingStopped: function(event) {
+				console.log('never called - not doing row editing');
+			},
+			onCellEditingStarted: function(event) {
+				console.log('cellEditingStarted');
+			},
+			onCellEditingStopped: function(event) {
+				console.log('cellEditingStopped');
+			},
+			onRowClicked: function(event) {
+				console.log('onRowClicked');
+				var selectedRows = gridOptions.api.getSelectedRows();
+				//									var detailPage =/*[[${detailPage}]]*/;
+				location.href = MemberList.URL + '?user_id=' + selectedRows[0].id;
+				//  			userDeatilSelect(selectedRows);
+
+			},
+			onCellClicked: function(event) {
+				console.log('onCellClicked');
+			},
+			isRowSelectable: function(event) {
+				console.log('isRowSelectable');
+				return true;
+			},
+			onSelectionChanged: function(event) {
+				console.log('onSelectionChanged');
+			},
+			onSortChanged: function(event) {
+				console.log('onSortChanged');
+			},
+			onCellValueChanged: function(event) {
+				console.log('onCellValueChanged');
+			},
+			getRowNodeId: function(data) {
+				return null;
+			},
+			// 리드 상단 고정 
+			setPinnedTopRowData: function(data) {
+				return null;
+			},
+			// 그리드 하단 고정 
+			setPinnedBottomRowData: function(data) {
+				return null;
+			},
+			getRowHeight: function(params) {
+				return 28 * (Math.floor(list.length / 60) + 1);
+			},
+			debug: false
 		};
-		
-//		document.addEventListener("DOMContentLoaded", () => {
-		    const gridDiv = document.querySelector("#myGrid");
-		    new agGrid.Grid(gridDiv, gridOptions);
-//		});
+
+		//		document.addEventListener("DOMContentLoaded", () => {
+		const gridDiv = document.querySelector("#myGrid");
+		$("#myGrid").empty();
+		new agGrid.Grid(gridDiv, gridOptions);
+		//		});
 	}
 };
