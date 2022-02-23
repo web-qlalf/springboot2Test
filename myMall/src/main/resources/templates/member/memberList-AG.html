@@ -18,6 +18,8 @@
 </style>
 <body>
 	<a href="/member/openMemberJoin.do" class="btn">회원 추가</a>
+	<button class="btn btn-success data-excel filecsv" data-name='memeberList'>CSV 내보내기</button>
+	<button class="btn btn-violet data-excel filexlxs" data-name='memeberList'>엑셀 내보내기</button>
 	<div id="myGrid" style="height: 50vh; width: 100vw;" class="ag-theme-alpine"></div>
 	<div>
 		<th:block layout:fragment="paging">
@@ -27,8 +29,10 @@
 
 </body>
 <script src="/js/member/member-list.js"></script>
+<script src="/js/excel/excelDownload.js"></script>
 <script th:inline="javascript">
 	document.addEventListener("DOMContentLoaded", ()=> {
+		
 		const gridDiv =	document.querySelector("#myGrid");
 		var list = /*[[${list}]]*/;
 		const columnDefs = [

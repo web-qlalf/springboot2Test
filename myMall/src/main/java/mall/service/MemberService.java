@@ -4,7 +4,6 @@ import java.util.List;
 
 
 import mall.dto.MemberDto;
-import mall.paging.Criteria;
 
 public interface MemberService {
 
