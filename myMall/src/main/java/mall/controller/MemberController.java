@@ -3,8 +3,6 @@ package mall.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
 import mall.dto.MemberDto;
 import mall.service.MemberService;
 
 @Controller
-@RequestMapping
 public class MemberController {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -37,7 +31,22 @@ public class MemberController {
 	 * // model.addAttribute("memberInfo", memberDto); return "/member/memberList";
 	 * }
 	 */
-
+	
+	@RequestMapping("/")
+	public @ResponseBody String root() throws Exception{
+		return "JSP in Gradle";
+	}
+	
+	@RequestMapping("/test1")
+	public String test1() throws Exception{
+		log.debug("test1() 리턴 전");
+		return "test1";
+	}
+	@RequestMapping("/test2")
+	public String test2() throws Exception{
+		log.debug("test2() 리턴 전");
+		return "sub/test2";
+	}
 
 	@RequestMapping("/member/openMemberListAgGrid.do")
 	public String openMemberListAgGrid(Model model) throws Exception {
