@@ -31,89 +31,93 @@ public class MemberController {
 	 * // model.addAttribute("memberInfo", memberDto); return "/member/memberList";
 	 * }
 	 */
+
+    @RequestMapping("/")
+    public @ResponseBody String root() throws Exception{
+        return "Security-StatusCheck (3)";
+    }
+    @RequestMapping("/denine")
+    public @ResponseBody String denine() throws Exception{
+    	return "다시 로그인 해 주십시오.";
+    }
+
+    @RequestMapping("/guest/welcome")
+    public String welcome1() {
+
+        return "guest/welcome1";
+    }
+    
+    @RequestMapping("/member/welcome")
+    public String welcome2() {
+
+        return "member/welcome2";
+    }
+    
+    @RequestMapping("/admin/welcome")
+    public String welcome3() {
+        System.out.println("???");
+        return "admin/welcome3";
+    }
 	
-	@RequestMapping("/")
-	public @ResponseBody String root() throws Exception{
-		return "JSP in Gradle";
-	}
-	
-	@RequestMapping("/test1")
-	public String test1() throws Exception{
-		log.debug("test1() 리턴 전");
-		return "test1";
-	}
-	@RequestMapping("/test2")
-	public String test2() throws Exception{
-		log.debug("test2() 리턴 전");
-		return "sub/test2";
-	}
+    @RequestMapping("/loginForm")
+    public String loginForm() {
+        
+        return "security/loginForm";
+    }
 
-	@RequestMapping("/member/openMemberListAgGrid.do")
-	public String openMemberListAgGrid(Model model) throws Exception {
-
-//		log.debug("openMemberList");
-		List<MemberDto> list = memberService.selectMemberListAgGrid();
-		model.addAttribute("detailPage", "/member/memberDetail.do");
-		model.addAttribute("list", list);
-		return "/member/memberList-AG";
-	}
-
-	@GetMapping("/member/openMemberList.do")
-	public String openMemberList(@ModelAttribute("params") MemberDto memberDto, Model model) throws Exception {
-		List<MemberDto> list = memberService.selectMemberList(memberDto);
-		System.out.println(list);
-		model.addAttribute("list", list);
-//		model.addAttribute("params", memberDto);
-		model.addAttribute("detailPage", "/member/memberDetail.do");
-		model.addAttribute("getPage", "/member/getUserList.do");
-		return "/member/memberList";
-	}
-
-	@RequestMapping("/member/getUserList.do")
-	@ResponseBody
-	public List<MemberDto> getUserList(@ModelAttribute("params") MemberDto memberDto) throws Exception {
-
-		List<MemberDto> list = memberService.selectMemberList(memberDto);
-		return list;
-	}
-
-	@RequestMapping("/member/openMemberJoin.do")
-	public String openMemberJoin() throws Exception {
-		return "/member/memberJoin";
-	}
-
-	@RequestMapping("/member/insertMember.do")
-	public String insertMember(MemberDto memberDto) throws Exception {
-//		System.out.println(memberDto);
-		memberService.insertMember(memberDto);
-		System.out.println(memberDto.getUsridx());
-		if (memberDto.getUsridx() > 0) {
-			return "redirect:/member/openMemberList.do";
-		} else {
-			return "redirect:/member/insertMember.do";
-		}
-
-	}
-
-	@RequestMapping("/member/memberDetail.do")
-	public String memberDatil(@RequestParam("user_id") String userid, Model model) throws Exception {
-		log.debug("memberDatil");
-		System.out.println("**********************************************************");
-//        return memberService.selectMemberDetail(user_id);
-
-		if (userid == null) {
-			return "redirect:/member/openMemberList.do";
-		}
-
-		MemberDto memberDto = memberService.selectMemberDetail(userid);
-		if (memberDto == null || "3".equals(memberDto.getUserauth().toString())
-				|| "4".equals(memberDto.getUserauth().toString())) {
-			// 휴면/탈퇴회원 거르기
-			return "redirect:/member/openMemberList.do";
-		}
-		model.addAttribute("memberInfo", memberDto);
-
-		return "/member/memberDetail";
-	}
+	/*
+	 * @RequestMapping("/member/openMemberListAgGrid.do") public String
+	 * openMemberListAgGrid(Model model) throws Exception {
+	 * 
+	 * // log.debug("openMemberList"); List<MemberDto> list =
+	 * memberService.selectMemberListAgGrid(); model.addAttribute("detailPage",
+	 * "/member/memberDetail.do"); model.addAttribute("list", list); return
+	 * "/member/memberList-AG"; }
+	 * 
+	 * @GetMapping("/member/openMemberList.do") public String
+	 * openMemberList(@ModelAttribute("params") MemberDto memberDto, Model model)
+	 * throws Exception { List<MemberDto> list =
+	 * memberService.selectMemberList(memberDto); System.out.println(list);
+	 * model.addAttribute("list", list); // model.addAttribute("params", memberDto);
+	 * model.addAttribute("detailPage", "/member/memberDetail.do");
+	 * model.addAttribute("getPage", "/member/getUserList.do"); return
+	 * "/member/memberList"; }
+	 * 
+	 * @RequestMapping("/member/getUserList.do")
+	 * 
+	 * @ResponseBody public List<MemberDto> getUserList(@ModelAttribute("params")
+	 * MemberDto memberDto) throws Exception {
+	 * 
+	 * List<MemberDto> list = memberService.selectMemberList(memberDto); return
+	 * list; }
+	 * 
+	 * @RequestMapping("/member/openMemberJoin.do") public String openMemberJoin()
+	 * throws Exception { return "/member/memberJoin"; }
+	 * 
+	 * @RequestMapping("/member/insertMember.do") public String
+	 * insertMember(MemberDto memberDto) throws Exception { //
+	 * System.out.println(memberDto); memberService.insertMember(memberDto);
+	 * System.out.println(memberDto.getUsridx()); if (memberDto.getUsridx() > 0) {
+	 * return "redirect:/member/openMemberList.do"; } else { return
+	 * "redirect:/member/insertMember.do"; }
+	 * 
+	 * }
+	 * 
+	 * @RequestMapping("/member/memberDetail.do") public String
+	 * memberDatil(@RequestParam("user_id") String userid, Model model) throws
+	 * Exception { log.debug("memberDatil"); System.out.println(
+	 * "**********************************************************"); // return
+	 * memberService.selectMemberDetail(user_id);
+	 * 
+	 * if (userid == null) { return "redirect:/member/openMemberList.do"; }
+	 * 
+	 * MemberDto memberDto = memberService.selectMemberDetail(userid); if (memberDto
+	 * == null || "3".equals(memberDto.getUserauth().toString()) ||
+	 * "4".equals(memberDto.getUserauth().toString())) { // 휴면/탈퇴회원 거르기 return
+	 * "redirect:/member/openMemberList.do"; } model.addAttribute("memberInfo",
+	 * memberDto);
+	 * 
+	 * return "/member/memberDetail"; }
+	 */
 
 }
