@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mall.mapper.AuthMapper">
+	<!-- mall.domain.MemberDto -->
+<select id="selectMemberDetailToEmail" parameterType="String" resultType="mall.domain.MemberDto">
+		<![CDATA[
+			SELECT
+				USRIDX, ID, PW, NAME, EMAIL, TEL,
+				TO_CHAR(CREATEDTIME,'yyyy-MM-DD HH24:MI') AS CREATEDTIME,
+				CASE
+                    WHEN GENDER = 1 THEN '남'
+                    WHEN GENDER = 2 THEN '여'
+                    ELSE '-'
+                END AS GENDER,
+				 CASE
+                    WHEN USERAUTH = 1 THEN '관리자'
+                    WHEN USERAUTH = 2 THEN '회원'
+                    WHEN USERAUTH = 3 THEN '탈퇴'
+                    WHEN USERAUTH = 4 THEN '휴면'
+                    ELSE '-'
+                END AS USERAUTH,
+                ROLE,
+                'succ' AS result
+			FROM
+				TBL_USER
+			WHERE
+				USERAUTH NOT IN  (3,4)
+			AND
+				Email = #{email}
+
+			ORDER BY USRIDX DESC, CREATEDTIME DESC
+		]]>
+	</select>
+	<select id="findByEmail" parameterType="String"  resultType="mall.security.Member" >
+	<![CDATA[
+		SELECT email,email AS userName, pw AS password, enabled, role
+		, CASE WHEN USERAUTH = 1 THEN 'ROLE_ADMIN' WHEN USERAUTH = 2 THEN 'ROLE_USER' ELSE 'UNKNOWN' END AS authority
+		FROM TBL_USER
+		WHERE email = #{email}
+		]]>
+	</select>
+	
+</mapper>

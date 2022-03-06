@@ -1,11 +1,14 @@
 package mall.mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import mall.dto.MemberDto;
+import mall.domain.MemberDto;
+import mall.domain.RefreshToken;
 import mall.paging.Criteria;
+import mall.service.User;
 
 @Mapper
 public interface MemberMapper {
@@ -18,4 +21,6 @@ public interface MemberMapper {
 	int selectMemberTotalCount(Criteria cri) throws Exception;
 
 	List<MemberDto> selectMemberListAgGrid() throws Exception;
+
+
 }

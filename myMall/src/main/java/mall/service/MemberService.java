@@ -1,12 +1,14 @@
 package mall.service;
 
 import java.util.List;
+import java.util.Optional;
 
-
-import mall.dto.MemberDto;
+import mall.domain.MemberDto;
+import mall.domain.RefreshToken;
+import mall.security.AuthToken;
 
 public interface MemberService {
-
+								
 	List<MemberDto> selectMemberList(MemberDto memberDto) throws Exception;
 	
 	void insertMember(MemberDto memberDto) throws Exception;
@@ -14,4 +16,7 @@ public interface MemberService {
 	MemberDto selectMemberDetail(String userid) throws Exception;
 
 	List<MemberDto> selectMemberListAgGrid() throws Exception;
+
+	
+	
 }

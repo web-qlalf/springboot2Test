@@ -32,7 +32,7 @@ var MemberList = new function() {
 	
 	function getListInfo(setting) {
 		$.ajax({
-			url: '/member/getUserList.do',
+			url: '/admin/getUserList.do',
 			type: 'post',
 			dataType: 'json',
 			success: function(data) {

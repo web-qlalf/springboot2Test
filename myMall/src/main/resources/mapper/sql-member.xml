@@ -3,14 +3,19 @@
 
 <mapper namespace="mall.mapper.MemberMapper">
 	
-	<select id="selectMemberTotalCount" parameterType="mall.dto.MemberDto" resultType="int">
+	<select id="findByEmail" parameterType="mall.domain.MemberDto" resultType="mall.domain.MemberDto" >
+		SELECT *
+		FROM TBL_USER
+		WHERE email = #{email}
+	</select>
+	<select id="selectMemberTotalCount" parameterType="mall.domain.MemberDto" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM
 			TBL_USER
 	</select>
 	
-	<select id="selectMemberList" parameterType="mall.dto.MemberDto"  resultType="mall.dto.MemberDto">
+	<select id="selectMemberList" parameterType="mall.domain.MemberDto"  resultType="mall.domain.MemberDto">
 		<![CDATA[
 			SELECT *
 			FROM
@@ -41,7 +46,7 @@
 		]]>
 		<!-- USERAUTH '1: 어드민 2:회원 3:탈퇴 4:휴면';	 -->
 	</select>
-	<select id="selectMemberListAgGrid" parameterType="mall.dto.MemberDto"  resultType="mall.dto.MemberDto">
+	<select id="selectMemberListAgGrid" parameterType="mall.domain.MemberDto"  resultType="mall.domain.MemberDto">
 		<![CDATA[
 			SELECT
 					rownum  as rn, USRIDX, ID, PW, NAME, EMAIL, TEL,
@@ -69,7 +74,7 @@
 		<!-- USERAUTH '1: 어드민 2:회원 3:탈퇴 4:휴면';	 -->
 	</select>
 	<!--  parameterType="board.board.dto.BoardDto" useGeneratedKeys="true" keyProperty="boardIdx"  -->
-	<insert id="insertMember" parameterType="mall.dto.MemberDto" useGeneratedKeys="false">
+	<insert id="insertMember" parameterType="mall.domain.MemberDto" useGeneratedKeys="false">
 		<![CDATA[
 			INSERT INTO TBL_USER
 			(
@@ -85,7 +90,7 @@
 			)
 			VALUES
 			(
-				SEQTBLUSER2.NEXTVAL,
+				SEQTBLUSER.NEXTVAL,
 				#{id},
 				#{pw},
 				#{email},
@@ -96,10 +101,10 @@
 				#{userauth}
 			)
 		]]>
-		<selectKey keyProperty="usridx" resultType="int" order="AFTER"> SELECT SEQTBLUSER2.CURRVAL FROM DUAL </selectKey>
+		<selectKey keyProperty="usridx" resultType="int" order="AFTER"> SELECT SEQTBLUSER.CURRVAL FROM DUAL </selectKey>
 	</insert>
 	
-	<select id="selectMemberDetail" parameterType="String" resultType="mall.dto.MemberDto">
+	<select id="selectMemberDetail" parameterType="String" resultType="mall.domain.MemberDto">
 		<![CDATA[
 			SELECT
 				USRIDX, ID, PW, NAME, EMAIL, TEL,
@@ -126,6 +131,33 @@
 			ORDER BY USRIDX DESC, CREATEDTIME DESC
 		]]>
 	</select>
+	<select id="selectMemberDetailToEmail" parameterType="String" resultType="mall.domain.MemberDto">
+		<![CDATA[
+			SELECT
+				USRIDX, ID, PW, NAME, EMAIL, TEL,
+				TO_CHAR(CREATEDTIME,'yyyy-MM-DD HH24:MI') AS CREATEDTIME,
+				CASE
+                    WHEN GENDER = 1 THEN '남'
+                    WHEN GENDER = 2 THEN '여'
+                    ELSE '-'
+                END AS GENDER,
+				 CASE
+                    WHEN USERAUTH = 1 THEN '관리자'
+                    WHEN USERAUTH = 2 THEN '회원'
+                    WHEN USERAUTH = 3 THEN '탈퇴'
+                    WHEN USERAUTH = 4 THEN '휴면'
+                    ELSE '-'
+                END AS USERAUTH
+			FROM
+				TBL_USER
+			WHERE
+				USERAUTH NOT IN  (3,4)
+			AND
+				Email = #{email}
+
+			ORDER BY USRIDX DESC, CREATEDTIME DESC
+		]]>
+	</select>
 	
 	<update id="updateHitCount" parameterType="int">
 		<![CDATA[
@@ -138,7 +170,7 @@
 		]]>
 	</update>
 	
-	<update id="updateMember" parameterType="mall.dto.MemberDto">
+	<update id="updateMember" parameterType="mall.domain.MemberDto">
 		<![CDATA[
 			UPDATE t_Member SET 
 				title = #{title},

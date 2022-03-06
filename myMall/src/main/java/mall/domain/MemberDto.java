@@ -1,9 +1,10 @@
-package mall.dto;
+package mall.domain;
 
 
 
 import lombok.Data;
 import mall.paging.CommonDTO;
+import mall.security.Role;
 
 @Data
 public class MemberDto  extends CommonDTO{
@@ -17,4 +18,7 @@ public class MemberDto  extends CommonDTO{
 	private String gender;
 	private String userauth;
 	private String result;
+	private Role role;
+
+
 }

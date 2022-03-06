@@ -1,4 +1,4 @@
-package mall.config;
+package mall.exception;
 
 import java.io.IOException;
 
@@ -13,13 +13,13 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-
+//implements AuthenticationFailureHandler
 @Configuration
-public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class CustomAuthenticationFailureHandler {
 
 	@Override
-	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException exception) throws IOException, ServletException {
+	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+		System.out.println("authenticationFailureHandler");
 		String loginid = request.getParameter("my_id");
 		String errormsg = "";
 
@@ -42,7 +42,7 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 	}
 
 	// 비밀번호를 3번 이상 틀릴 시 계정 잠금 처리
-	protected void loginFailureCount(String username) {
+	protected static void loginFailureCount(String username) {
 		/*
 		 * // 틀린 횟수 업데이트 userDao.countFailure(username); // 틀린 횟수 조회 int cnt =
 		 * userDao.checkFailureCount(username); if(cnt==3) { // 계정 잠금 처리

@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import mall.dto.MemberDto;
+import mall.domain.MemberDto;
 import mall.service.ExcelService;
 
 @Controller
