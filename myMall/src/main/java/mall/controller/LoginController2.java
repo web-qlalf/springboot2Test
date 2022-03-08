@@ -17,7 +17,7 @@ import mall.service.LoginService;
 @RestController
 @RequestMapping("/api/v1/login")
 @RequiredArgsConstructor
-public class LoginController {
+public class LoginController2 {
 
     private final LoginService loginService;
 

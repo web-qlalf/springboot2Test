@@ -59,7 +59,7 @@ public class MemberController {
 		return "admin/welcome3";
 	}
 
-	@RequestMapping("/loginForm")
+	@RequestMapping("/loginForm1")
 	public String loginForm() {
 
 		return "security/loginForm";

@@ -1,4 +1,4 @@
-package mall.config;
+package mall.commons;
 
 import java.util.Arrays;
 
@@ -36,7 +36,7 @@ import mall.service.JwtAuthTokenProvider;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
 
 	private final JwtAuthTokenProvider jwtAuthTokenProvider;
 	private final JwtAuthenticationEntryPoint authenticationErrorHandler;
@@ -66,6 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/guest/**").permitAll()
 			.antMatchers("/api/v1/login/**").permitAll()
 			.antMatchers("/member/**").permitAll()
+			.antMatchers("/user/**").permitAll()
 //			.antMatchers("/member/**").hasAnyAuthority(Role.USER.getCode(), Role.ADMIN.getCode())
 //			.antMatchers("/admin/**").hasAnyAuthority(Role.ADMIN.getCode())
 //			.antMatchers("/member/**").hasAnyRole("USER", "ADMIN")
@@ -131,10 +132,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //	  }
 	 
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+//	@Bean
+//	public BCryptPasswordEncoder passwordEncoder() {
+//		return new BCryptPasswordEncoder();
+//	}
 
 	@Override // 더블슬래시 가능하도록
 	public void configure(WebSecurity web) throws Exception {

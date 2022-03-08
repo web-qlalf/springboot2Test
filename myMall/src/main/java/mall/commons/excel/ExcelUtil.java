@@ -1,4 +1,4 @@
-package mall.common;
+package mall.commons.excel;
 
 import java.io.File;
 import java.io.FileNotFoundException;
